@@ -4,9 +4,11 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
     signOut
+    
 } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { doc, setDoc, serverTimestamp } from "firebase/firestore";
+import { doc, setDoc, serverTimestamp, addDoc, collection, Timestamp } from "firebase/firestore";
+import displayNameTaken from "../utils/displayNameCheck";
 
 const AuthContext = createContext();
 
@@ -19,9 +21,21 @@ export function AuthProvider({ children }){
     const [loading, setLoading] = useState(true);
 
     async function signup(email, password, displayName) {
+        if (await displayNameTaken(displayName)) {
+            const error = new Error("Display name already taken");
+            error.code = "display-name-taken";
+            throw error;
+        }
+        
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const uid = userCred.user.uid;
+        await setDoc(doc(db, "users", uid), {
+            name: displayName,
+            email: email,
+            userID: uid,
+            photoURL: "",
+        });
         return userCred;
-        // Optional: create a Firestore document for this user
     }
     function login(email, password){
         return signInWithEmailAndPassword(auth, email, password);

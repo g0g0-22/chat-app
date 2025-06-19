@@ -99,7 +99,7 @@ export function subscribeToChatMessages(chatId, onUpdate) {
  * Mark all unread messages in a chat as read by the current user.
  */
 export async function markChatAsRead(chatId, currentUid, messages) {
-  const batch = writeBatch(db);
+  const batch = WriteBatch(db);
     for (let msg of messages) {
     if (!msg.readBy.includes(currentUid)) {
         const msgRef = doc(db, "chats", chatId, "messages", msg.id);
