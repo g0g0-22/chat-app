@@ -1,0 +1,48 @@
+/* src/components/Chat/ChatRoom.css */
+
+.chat-room {
+  display: flex;
+  flex-direction: column;
+  height: 100%; /* fills the middle panel */
+  width: 100%;
+}
+
+.messages-container {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.message-item {
+width:fit-content;
+  max-width: 50%;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 1rem;
+  background: #f1f1f1;
+}
+
+.message-item.own {
+  margin-left: auto;
+  background: #cef1ce;
+}
+
+.input-container {
+  flex: 0 0 auto;
+  display: flex;
+  padding: 0.5rem;
+  border-top: 1px solid #eee;
+}
+
+.input-container input {
+  flex: 1 1 auto;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+
+.input-container button {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}

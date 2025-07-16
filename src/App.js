@@ -1,3 +1,4 @@
+// src/App.jsx
 import React from "react";
 import {
   BrowserRouter,
@@ -5,45 +6,51 @@ import {
   Route,
   Navigate
 } from "react-router-dom";
-import { useAuth } from "./contexts/AuthContext";
+import { useAuth } from "./contexts/AuthContext.js";
 
-import LandingPage from "./components/LandingPage";
-import Login from "./components/Auth/Login";
-import Signup from "./components/Auth/Signup";
-import AppLayout from "./components/Layout/AppLayout";
-
-function PrivateRoute({ children }){
+import LandingPage from "./components/LandingPage.js";
+import Login       from "./components/Auth/Login.js";
+import Signup      from "./components/Auth/Signup.js";
+import AppLayout   from "./components/Layout/AppLayout.js";
+import ChatRoom    from "./components/Chat/ChatRoom.jsx";
+import SelectChatPlaceholder from "./components/Chat/SelectChatPlaceholder.jsx";
+function PrivateRoute({ children }) {
   const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/login"/>;
+  return currentUser ? children : <Navigate to="/login" />;
 }
-export default function App(){
+
+export default function App() {
   const { currentUser } = useAuth();
+
   return (
       <Routes>
-        {/*Landing page: if logged in go to chats*/}
+        {/* Landing / Login / Signup */}
         <Route
           path="/"
           element={
-            currentUser ? <Navigate to="/chats" replace/>
-            : <LandingPage/>
+            currentUser 
+              ? <Navigate to="/chats" replace/> 
+              : <LandingPage/>
           }
         />
-
         <Route
           path="/login"
           element={
-            currentUser ? <Navigate to="/chats" replace/>
-            : <Login/>
+            currentUser
+              ? <Navigate to="/chats" replace/>
+              : <Login/>
           }
         />
-
         <Route
           path="/signup"
           element={
-            !currentUser ? <Signup/> : <Navigate to="/chats" replace/>
+            !currentUser
+              ? <Signup/>
+              : <Navigate to="/chats" replace/>
           }
         />
 
+        {/* Protected chats “section” */}
         <Route
           path="/chats/*"
           element={
@@ -51,13 +58,21 @@ export default function App(){
               <AppLayout/>
             </PrivateRoute>
           }
-        />
-        
-        <Route
-          path="*"
-          element={<Navigate to="/" replace/>}
-        />
+        >
+          {/* No chat selected */}
+          <Route 
+            index 
+            element={<SelectChatPlaceholder/>} 
+          />
+          {/* Chat room for a given chatId */}
+          <Route 
+            path=":chatId" 
+            element={<ChatRoom/>} 
+          />
+        </Route>
 
+        {/* Catch-all */}
+        <Route path="*" element={<Navigate to="/" replace/>}/>
       </Routes>
-  )
+  );
 }

@@ -6,9 +6,9 @@ import {
     signOut
     
 } from "firebase/auth";
-import { auth, db } from "../firebase";
+import { auth, db } from "../firebase.js";
 import { doc, setDoc, serverTimestamp, addDoc, collection, Timestamp } from "firebase/firestore";
-import displayNameTaken from "../utils/displayNameCheck";
+import displayNameTaken from "../utils/displayNameCheck.js";
 
 const AuthContext = createContext();
 
@@ -21,6 +21,7 @@ export function AuthProvider({ children }){
     const [loading, setLoading] = useState(true);
 
     async function signup(email, password, displayName) {
+        const DEFAULT_PHOTO_URL = "https://firebasestorage.googleapis.com/v0/b/chat-app-d9a3b.firebasestorage.app/o/default_200x200.jpeg?alt=media&token=4e6415b0-c578-4d00-b34f-f90e7133ebbb"
         if (await displayNameTaken(displayName)) {
             const error = new Error("Display name already taken");
             error.code = "display-name-taken";
@@ -33,7 +34,7 @@ export function AuthProvider({ children }){
             name: displayName,
             email: email,
             userID: uid,
-            photoURL: "",
+            photoURL: DEFAULT_PHOTO_URL,
         });
         return userCred;
     }

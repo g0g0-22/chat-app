@@ -1,0 +1,26 @@
+/* SelfCard.css */
+.self-card {
+  display: flex;                /* enable flex layout */
+  flex-direction: row;          /* default, can omit */
+  justify-content: flex-start;  /* left‑align items */
+  align-items: center;          /* vertically center them */
+  gap: 0.5rem;                  /* space between img and name */
+  padding: 0.5rem;              /* optional breathing room */
+}
+
+/* make sure no other img{} rule is colliding! */
+.self-img {
+  flex-shrink: 0;               /* don’t let it get squashed */
+  width: 2rem;                  /* pick a fixed size */
+  height: 2rem;
+  border-radius: 50%;           /* circle */
+  object-fit: cover;            /* crop nicely if it’s not square */
+  display: block;               /* eliminate inline quirks */
+}
+
+/* remove any #name {} rules; use class instead */
+.self-name {
+  font-size: 1rem;
+  color: #333;
+  margin: 0;                    /* reset browser defaults */
+}

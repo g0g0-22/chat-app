@@ -1,0 +1,23 @@
+/* src/components/Layout/AppLayout.css */
+
+/* Container spans full viewport and lays out two columns */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  background: #fff;
+}
+
+/* Sidebar: fixed one-third width, scrollable if content overflows */
+.app-layout .sidebar {
+  width: 33.3333%;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+}
+
+/* Main pane: takes remaining space, scrollable, column layout */
+.app-layout .main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+}

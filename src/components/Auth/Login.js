@@ -1,6 +1,6 @@
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext.js";
 import React, { useState } from 'react';
-import getAuthErrorMessage from "../../utils/getAuthErrorMessage";
+import getAuthErrorMessage from "../../utils/getAuthErrorMessage.js";
 import "./Auth.css"
 import { Link } from "react-router-dom";
 

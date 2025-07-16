@@ -1,6 +1,6 @@
-import { db } from "../firebase";
+import { db } from "../firebase.js";
 import { doc, getDoc } from "firebase/firestore";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../contexts/AuthContext.js";
 import { useEffect, useState } from "react";
 
 export default function WelcomeMessage(){

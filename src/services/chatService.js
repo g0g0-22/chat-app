@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   addDoc,
+  getDoc,
   setDoc,
   updateDoc,
   query,
@@ -12,8 +13,8 @@ import {
   serverTimestamp,
   arrayUnion
 } from "firebase/firestore";
-import { db } from "../firebase";
-import { WriteBatch } from "firebase/firestore";
+import { db } from "../firebase.js";
+import { writeBatch } from "firebase/firestore";
 /**
  * Create a new 1:1 or group chat.
  * @param {string[]} participantUids — array of UIDs to include (2+ entries for group)
@@ -21,18 +22,31 @@ import { WriteBatch } from "firebase/firestore";
  * @returns {Promise<string>} the new chatId
  */
 export async function createChat(participantUids, name = "") {
-  const chatRef = await addDoc(collection(db, "chats"), {
+  let chatRef, chatId;
+  if (participantUids.length === 2) {
+    // sort UIDs so A→B and B→A yield the same key
+    chatId = participantUids.sort().join("_");
+    chatRef = doc(db, "chats", chatId);
+    const snap = await getDoc(chatRef);
+    if (snap.exists()) return chatId;
+    await setDoc(chatRef, {
+      participants: participantUids,
+      isGroup: false,
+      name: "",
+      createdAt: serverTimestamp(),
+      lastMessage: { text: "", senderId: "", createdAt: serverTimestamp() }
+    });
+    return chatId;
+  }
+  // fallback for group chats
+  const newRef = await addDoc(collection(db, "chats"), {
     participants: participantUids,
-    isGroup: participantUids.length > 2,
-    name: name,
+    isGroup: true,
+    name,
     createdAt: serverTimestamp(),
-    lastMessage: {
-      text: "",
-      senderId: "",
-      createdAt: serverTimestamp()
-    }
+    lastMessage: { text: "", senderId: "", createdAt: serverTimestamp() }
   });
-  return chatRef.id;
+  return newRef.id;
 }
 
 /**
@@ -99,12 +113,12 @@ export function subscribeToChatMessages(chatId, onUpdate) {
  * Mark all unread messages in a chat as read by the current user.
  */
 export async function markChatAsRead(chatId, currentUid, messages) {
-  const batch = WriteBatch(db);
-    for (let msg of messages) {
+  const batch = writeBatch(db);
+  messages.forEach(msg => {
     if (!msg.readBy.includes(currentUid)) {
-        const msgRef = doc(db, "chats", chatId, "messages", msg.id);
-        batch.update(msgRef, { readBy: arrayUnion(currentUid) });
-        }
+      const msgRef = doc(db, "chats", chatId, "messages", msg.id);
+      batch.update(msgRef, { readBy: arrayUnion(currentUid) });
     }
-    await batch.commit();
+  });
+  await batch.commit();
 }
