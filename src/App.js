@@ -1,43 +1,63 @@
-// src/App.js
-import React, { useState } from "react";
+import React from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate
+} from "react-router-dom";
 import { useAuth } from "./contexts/AuthContext";
-import UserSearch  from "./components/Chat/UserSearch";
-import Signup from "./components/Auth/Signup";
-import Login from "./components/Auth/Login"
-import welcomeMessage from "./components/welcomeMessage";
-import WelcomeMessage from "./components/welcomeMessage";
-function App() {
-  
-  const { currentUser, logout } = useAuth();
-  const [view,setView] = useState("none"); //none | login | signup
-  
-  const renderAuthScreen = () =>{
-    if(view==="signup") return <Signup />;
-    if(view==="login") return <Login/>;
-    return (
-      <div>
-        <p>Welcome to the chat app!</p>
-        <button onClick={()=>setView("signup")}>Sign Up</button>
-        <button onClick={()=>setView("login")}>Log in</button>
-      </div>
-    )
-  }
-  const renderLoggedInScreen = () => {
-    return(
-    <div>
-      <p>You are logged in as {currentUser.email}</p>
-      <button onClick={()=>{
-        setView("none");
-        logout();
-      }}>Log out</button>
-    </div>)
-  }
-  return (
-    <div>
-      <WelcomeMessage/>
-      {currentUser ? renderLoggedInScreen() : renderAuthScreen()}
-    </div>
-  );
-}
 
-export default App;
+import LandingPage from "./components/LandingPage";
+import Login from "./components/Auth/Login";
+import Signup from "./components/Auth/Signup";
+import AppLayout from "./components/Layout/AppLayout";
+
+function PrivateRoute({ children }){
+  const { currentUser } = useAuth();
+  return currentUser ? children : <Navigate to="/login"/>;
+}
+export default function App(){
+  const { currentUser } = useAuth();
+  return (
+      <Routes>
+        {/*Landing page: if logged in go to chats*/}
+        <Route
+          path="/"
+          element={
+            currentUser ? <Navigate to="/chats" replace/>
+            : <LandingPage/>
+          }
+        />
+
+        <Route
+          path="/login"
+          element={
+            currentUser ? <Navigate to="/chats" replace/>
+            : <Login/>
+          }
+        />
+
+        <Route
+          path="/signup"
+          element={
+            !currentUser ? <Signup/> : <Navigate to="/chats" replace/>
+          }
+        />
+
+        <Route
+          path="/chats/*"
+          element={
+            <PrivateRoute>
+              <AppLayout/>
+            </PrivateRoute>
+          }
+        />
+        
+        <Route
+          path="*"
+          element={<Navigate to="/" replace/>}
+        />
+
+      </Routes>
+  )
+}

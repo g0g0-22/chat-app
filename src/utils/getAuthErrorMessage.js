@@ -6,7 +6,8 @@ export default function getAuthErrorMessage(code){
     "auth/wrong-password": "Incorrect password.",
     "auth/weak-password": "Password should be at least 6 characters.",
     "auth/too-many-requests": "Too many attempts. Try again later.",
-    "display-name-taken": "Display name is already in use."
+    "display-name-taken": "Display name is already in use.",
+    "auth/invalid-credential" : "Wrong credentials. Please try again.",
   };
   return map[code] || "Something went wrong.";
 }

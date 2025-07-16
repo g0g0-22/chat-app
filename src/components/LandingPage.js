@@ -5,16 +5,16 @@ import { Link } from "react-router-dom";
 
 export default function LandingPage() {
   return (
+    
     <div className="landing-container">
-      <h1 className="landing-title">Welcome to Drift!</h1>
+      <img src="/assets/shapes/shape1.svg" alt="decorative shape" />
+      <h1 className="landing-title">Welcome to Lynq!</h1>
+      <p>Connect instantly with friends, groups, and your AI assistant in secure, real-time conversations.</p>
       <div className="landing-buttons">
-        <Link to="/signup">
-        <button id="signup">Sign Up</button>
-        </Link>
-        <Link to="/login">
-        <button id="login">Log In</button>
-        </Link>
+        <Link to="/signup" className="btn signup-btn">Sign Up</Link>
+        <Link to="/login" className="btn login-btn">Log In</Link>
       </div>
+
     </div>
   );
 }

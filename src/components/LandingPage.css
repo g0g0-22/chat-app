@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Matangi:wght@300..900&display=swap');
 body,html{
   font-family: "Matangi";
+  
 }
 /* LandingPage.css */
 .landing-container {
@@ -9,32 +10,83 @@ body,html{
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #F2F2F2;
+  background: #F9F9F6;
+  position: relative;
+  overflow: hidden;
+  z-index: 2;
+
+  -webkit-user-select: none;  /* Chrome/Safari */
+  -moz-user-select:    none;  /* Firefox */
+  -ms-user-select:     none;  /* IE10+ */
+  user-select:         none;  /* standard */
+
 }
 .landing-title {
   font-size: 3rem;
-  color: #2B2B2B;
-  margin-bottom: 1rem;
+  color: #1C1F33;
+  margin-bottom: 0rem;
+  z-index: 1;
+  text-shadow: 2px 2px 2px rgba(35, 35, 35, 0.25);
+
 }
-.landing-buttons button {
+p{
+  margin-bottom: 2rem;
+  z-index: 1;
+  font-weight: 500;
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.13);
+
+}
+img{
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  z-index: 0;
+  margin-bottom: 20px;
+  transform: scale(1.1); /* Slightly enlarges the shape */
+
+}
+.landing-buttons{
+  z-index: 3;
+}
+.landing-buttons .btn {
+  display: inline-block;
+  text-align: center;
+  text-decoration: none;
   margin: 0 0.5rem;
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
-  cursor: pointer;
-}
-#signup{
-  background-color: #1C1F33;
-  color:white;
-  border-color:#151726;
-  border-radius: 6px;
-  border-style:solid;
   font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
   
 }
-#login{
-  border-radius: 6px;
-  border-color: #1C1F33;
-  border-style: solid;
+
+/* SIGN UP - Filled Button */
+.signup-btn {
+  background-color: #1C1F33;
+  color: white;
+  border: 2px solid #151726;
+}
+.signup-btn:hover {
+  background-color: #2B2B2B;
+  box-shadow: 0 4px 12px rgba(28, 31, 51, 0.25);
+}
+.signup-btn:active {
+  background-color: #0F101D;
+  transform: scale(0.98);
+}
+
+/* LOGIN - Outline Button */
+.login-btn {
+  background-color: transparent;
   color: #1C1F33;
-  font-weight: 600;	
+  border: 2px solid #1C1F33;
+}
+.login-btn:hover {
+  background-color: #F2F2F2;
+}
+.login-btn:active {
+  background-color: #E4E4E4;
+  transform: scale(0.98);
 }

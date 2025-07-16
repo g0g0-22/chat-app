@@ -1,6 +1,9 @@
 import { useAuth } from "../../contexts/AuthContext";
 import React, { useState } from 'react';
 import getAuthErrorMessage from "../../utils/getAuthErrorMessage";
+import "./Auth.css"
+import { Link } from "react-router-dom";
+
 export default function Login() {
     const { login } = useAuth();
     const [email, setEmail] = useState("");
@@ -11,19 +14,36 @@ export default function Login() {
         try{
             await login(email, password);
         }catch(err){
-            console.error("Login Error: ", err.message);
+            console.error("Login error:", err.message);
             setError(getAuthErrorMessage(err.code || err.message));
         }
     }
     return(
-        <form onSubmit={handleLogin}>
-            <input value={email} placeholder="Email" type="text" onChange={e => setEmail(e.target.value)}/>
-            <input value={password} placeholder="Password" type="password" onChange={e => setPassword(e.target.value)}/>
-            <button type="submit">Log In</button>
+        <div className="auth-container">
+            <img src="assets/shapes/shape2.svg"/>
+            <h2 className="auth-title">Log In</h2>
+            <form onSubmit={handleLogin} className="auth-form">
+                <input
+                value={email}
+                placeholder="Email"
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                />
+                <input
+                value={password}
+                placeholder="Password"
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                />
+                <button type="submit">Log In</button>
+                {error && <p className="auth-error">{error}</p>}
+            </form>
+            <div className="redirect">
+                <p>Dont have an accout? <br></br> <Link className="redirectLink"to="/signup">Sign Up!</Link></p>
+            </div>
             
-            {error && <p style={{ color: "red" }}>{error}</p>}
-        </form>
-
-
+        </div>
     )
 }
